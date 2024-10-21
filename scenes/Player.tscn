@@ -22,7 +22,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("playerHitArea/hitArea:disabled")
+tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -81,7 +81,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("playerHitArea/hitArea:disabled")
+tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -117,12 +117,12 @@ _data = {
 "attackEnemi": SubResource("Animation_3vqdf")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_wllbe"]
+size = Vector3(0.344116, 0.427063, 0.589355)
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ujpgf"]
 radius = 0.282597
 height = 1.18717
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_wllbe"]
-size = Vector3(0.344116, 0.427063, 0.589355)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tk6me"]
 
@@ -155,16 +155,17 @@ hframes = 7
 vframes = 7
 frame = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("CapsuleShape3D_ujpgf")
-
-[node name="playerHitArea" type="Area3D" parent="."]
+[node name="playerHitArea" type="Area3D" parent="Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, 0.98645, -0.164066, 0, 0.164066, 0.98645, 0, 0, 0)
 script = ExtResource("3_wej2q")
 
-[node name="hitArea" type="CollisionShape3D" parent="playerHitArea"]
+[node name="hitArea" type="CollisionShape3D" parent="Sprite3D/playerHitArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.490159, -0.000457764, -0.00219727)
 shape = SubResource("BoxShape3D_wllbe")
 disabled = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_ujpgf")
 
 [node name="CameraControl" type="Node3D" parent="."]
 top_level = true
@@ -184,4 +185,4 @@ value = 100.0
 show_percentage = false
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="body_entered" from="playerHitArea" to="." method="_on_player_hit_area_body_entered"]
+[connection signal="body_entered" from="Sprite3D/playerHitArea" to="." method="_on_player_hit_area_body_entered"]
