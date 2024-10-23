@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://script/playerMovement.gd" id="1_i62jh"]
 [ext_resource type="Texture2D" uid="uid://c0thjsgikvna8" path="res://Animations/Brain-Sheet.png" id="2_vt2go"]
-[ext_resource type="Script" path="res://script/playerHitArea.gd" id="3_wej2q"]
 
 [sub_resource type="Animation" id="Animation_ijhyk"]
 resource_name = "Attack"
@@ -117,6 +116,13 @@ _data = {
 "attackEnemi": SubResource("Animation_3vqdf")
 }
 
+[sub_resource type="GDScript" id="GDScript_w8p6i"]
+script/source = "extends Area3D
+
+var damage = 10
+
+"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_wllbe"]
 size = Vector3(0.344116, 0.427063, 0.589355)
 
@@ -157,7 +163,7 @@ frame = 1
 
 [node name="playerHitArea" type="Area3D" parent="Sprite3D"]
 transform = Transform3D(1, 0, 0, 0, 0.98645, -0.164066, 0, 0.164066, 0.98645, 0, 0, 0)
-script = ExtResource("3_wej2q")
+script = SubResource("GDScript_w8p6i")
 
 [node name="hitArea" type="CollisionShape3D" parent="Sprite3D/playerHitArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.490159, -0.000457764, -0.00219727)

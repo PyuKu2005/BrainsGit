@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b64aafgqafdrf"]
+[gd_scene load_steps=14 format=3 uid="uid://b64aafgqafdrf"]
 
 [ext_resource type="Script" path="res://script/enemi_test.gd" id="1_53gi3"]
 [ext_resource type="PackedScene" uid="uid://bqqlihdst8ski" path="res://scenes/health_bar_3d.tscn" id="2_v26ps"]
@@ -53,6 +53,17 @@ _data = {
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0wk0n"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjlfy"]
+bg_color = Color(0.54099, 0.54099, 0.54099, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7g6g2"]
+bg_color = Color(0.805112, 0, 0.300997, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_ne7lb"]
 viewport_path = NodePath("SubViewport")
 
@@ -81,7 +92,7 @@ transform = Transform3D(1.5, 0, 0, 0, 2.48403, 0, 0, 0, 1.5, 0, 0, 0)
 shape = SubResource("SphereShape3D_nv0k4")
 
 [node name="enemyHitArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 4.75091, 0, 0, 0, 1, 0, 1.64596, 0)
+transform = Transform3D(1, 0, 0, 0, 4.41863, 0, 0, 0, 1, 0, 1.74466, 0)
 
 [node name="hitCollision" type="CollisionShape3D" parent="enemyHitArea"]
 transform = Transform3D(2.33699, 0, 0, 0, 0.714594, 0, 0, 0, 2.35705, 0, -0.348699, 0)
@@ -92,6 +103,8 @@ disable_3d = true
 transparent_bg = true
 
 [node name="healthBar3d" parent="SubViewport" instance=ExtResource("2_v26ps")]
+theme_override_styles/background = SubResource("StyleBoxFlat_tjlfy")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7g6g2")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00765872, 1.81856, -0.0695481)
