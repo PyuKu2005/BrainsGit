@@ -6,6 +6,7 @@ const SPEED = 5.0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var isAttacking = false
 var playerHealth = 100
+@onready var timer = $Timer
 
 
 ##### DÉBUT PROCESS DELTA #####
@@ -66,7 +67,11 @@ func hurt(hitPoints):
 		die()
 
 func die():
-	pass
+	queue_free()
+
+
+
+
 
 func _on_player_hit_area_body_entered(body):
 	if body.is_in_group("Enemi"):

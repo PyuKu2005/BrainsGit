@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 @onready var navAgent = $NavigationAgent3D
-
+@onready var animation = $AnimationPlayer
 
 var SPEED = 3.0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
