@@ -23,8 +23,7 @@ func _physics_process(delta):
 		velocity.z = direction.z * SPEED
 		animation.play("BrainMoving")
 
-		# Rotate the character based on input
-		if input_dir.x < 0:  # Moving left
+		if input_dir.x < 0:  
 			$Sprite3D.flip_h = true
 			area3d.scale.x = -abs(area3d.scale.x)  
 		elif input_dir.x > 0:  
@@ -56,7 +55,6 @@ func _physics_process(delta):
 	$CameraControl.position = camera_position
 ##### FIN PROCESS DELTA #####
 	
-	
 func hurt(hitPoints):
 	if hitPoints < playerHealth:
 		playerHealth -= hitPoints
@@ -67,11 +65,7 @@ func hurt(hitPoints):
 		die()
 
 func die():
-	queue_free()
-
-
-
-
+	get_tree().reload_current_scene()
 
 func _on_player_hit_area_body_entered(body):
 	if body.is_in_group("Enemi"):
