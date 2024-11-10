@@ -19,50 +19,43 @@ func _physics_process(delta):
 
 	# Define reduced speed for attacking
 	var attackSpeed = SPEED / 5.0
-	var currentSpeed = SPEED  # Default to normal speed
+	var currentSpeed = SPEED  
 	
 	###### COURIR (Sprinting) #######
 	if Input.is_action_pressed("Courir") and direction and not isAttacking:
 		currentSpeed = sprintSpeed
 	elif isAttacking:
-		currentSpeed = attackSpeed  # Set reduced speed while attacking
+		currentSpeed = attackSpeed  
 
 	# Movement and animation logic
 	if direction:
 		velocity.x = direction.x * currentSpeed
 		velocity.z = direction.z * currentSpeed
 
-		# Play movement animation if not attacking
+		
 		if not isAttacking:
 			animation.play("BrainMoving", -1, 2.0 if currentSpeed == sprintSpeed else 1.0, true)
 
-		# Rotate character based on input direction
-		if input_dir.x < 0:  # Moving left
+		if input_dir.x < 0:  
 			$Sprite3D.flip_h = true
 			area3d.scale.x = -abs(area3d.scale.x)
 		elif input_dir.x > 0:  
 			$Sprite3D.flip_h = false  
 			area3d.scale.x = abs(area3d.scale.x)
 	else:
-		# If not moving, transition to idle unless attacking
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		if not isAttacking:
 			animation.play("BrainIdle", -1, 1.0, true)
-
-	# Move the character
 	move_and_slide()
 
-	###### COMBAT (Attack handling) #######
-	# Start the attack if the button is pressed and not currently attacking
+	###### COMBAT #######
 	if Input.is_action_just_pressed("playerAttack") and not isAttacking:
 		isAttacking = true
 		if animation.has_animation("Attack"):
 			animation.play("Attack")
-
-	# End the attack state if the attack button is released
 	if isAttacking and not Input.is_action_pressed("playerAttack"):
-		isAttacking = false  # Reset attack state after releasing button
+		isAttacking = false
 
 	############# CAMERA ################
 	var camera_position = $CameraControl.position
