@@ -1,7 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://cn5s5415vxhb0"]
+[gd_scene load_steps=16 format=3 uid="uid://cn5s5415vxhb0"]
 
 [ext_resource type="Script" path="res://script/playerMovement.gd" id="1_i62jh"]
-[ext_resource type="Texture2D" uid="uid://b07qk422pbr6m" path="res://Animations/TheBrain-Sheet.png" id="2_vg3rf"]
+[ext_resource type="Texture2D" uid="uid://dq3aftttufc4x" path="res://Animations/TheBrain-Sheet.png" id="2_vg3rf"]
 
 [sub_resource type="Animation" id="Animation_ijhyk"]
 resource_name = "Attack"
@@ -30,6 +30,35 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_maj4y"]
+resource_name = "Attack2"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11, 12]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, true, false, false]
 }
 
 [sub_resource type="Animation" id="Animation_465wi"]
@@ -109,10 +138,9 @@ tracks/0/keys = {
 "values": [11, 8, 10, 11]
 }
 
-[sub_resource type="Animation" id="Animation_maj4y"]
-resource_name = "Attack2"
+[sub_resource type="Animation" id="Animation_yppo3"]
+resource_name = "Dash"
 length = 0.6
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -120,22 +148,10 @@ tracks/0/path = NodePath("Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [6, 7, 8, 9, 10, 11, 12]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [true, true, false, false]
+"values": [24, 25, 26, 27, 28]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1msms"]
@@ -144,6 +160,7 @@ _data = {
 "Attack2": SubResource("Animation_maj4y"),
 "BrainIdle": SubResource("Animation_465wi"),
 "BrainMoving": SubResource("Animation_3duxf"),
+"Dash": SubResource("Animation_yppo3"),
 "RESET": SubResource("Animation_a2ymg"),
 "attackEnemi": SubResource("Animation_3vqdf")
 }
@@ -175,6 +192,7 @@ shadow_color = Color(0, 0, 1, 0.6)
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_i62jh")
+dash_duration = 0.1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -189,7 +207,7 @@ shaded = true
 alpha_cut = 2
 texture_filter = 0
 texture = ExtResource("2_vg3rf")
-hframes = 5
+hframes = 6
 vframes = 5
 frame = 1
 
