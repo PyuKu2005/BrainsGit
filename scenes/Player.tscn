@@ -1,38 +1,40 @@
-[gd_scene load_steps=14 format=3 uid="uid://cn5s5415vxhb0"]
+[gd_scene load_steps=15 format=3 uid="uid://cn5s5415vxhb0"]
 
 [ext_resource type="Script" path="res://script/playerMovement.gd" id="1_i62jh"]
-[ext_resource type="Texture2D" uid="uid://c0thjsgikvna8" path="res://Animations/Brain-Sheet.png" id="2_vt2go"]
+[ext_resource type="Texture2D" uid="uid://b07qk422pbr6m" path="res://Animations/TheBrain-Sheet.png" id="2_vg3rf"]
 
 [sub_resource type="Animation" id="Animation_ijhyk"]
 resource_name = "Attack"
+length = 0.5
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.14004, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [6, 7, 8, 9, 10, 11]
+"values": [true, false, false, true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
+tracks/1/path = NodePath("Sprite3D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [true, false, true]
+"values": [1, 2, 3, 4, 5]
 }
 
 [sub_resource type="Animation" id="Animation_465wi"]
 resource_name = "BrainIdle"
+length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -41,15 +43,15 @@ tracks/0/path = NodePath("Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 4, 5]
+"values": [21, 22, 23]
 }
 
 [sub_resource type="Animation" id="Animation_3duxf"]
 resource_name = "BrainMoving"
-length = 0.9
+length = 0.7
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -58,10 +60,10 @@ tracks/0/path = NodePath("Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [11, 12, 13, 14, 15, 16, 17, 18, 19]
+"values": [13, 14, 15, 16, 17, 18, 19, 20]
 }
 
 [sub_resource type="Animation" id="Animation_a2ymg"]
@@ -107,9 +109,39 @@ tracks/0/keys = {
 "values": [11, 8, 10, 11]
 }
 
+[sub_resource type="Animation" id="Animation_maj4y"]
+resource_name = "Attack2"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11, 12]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, true, false, false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1msms"]
 _data = {
 "Attack": SubResource("Animation_ijhyk"),
+"Attack2": SubResource("Animation_maj4y"),
 "BrainIdle": SubResource("Animation_465wi"),
 "BrainMoving": SubResource("Animation_3duxf"),
 "RESET": SubResource("Animation_a2ymg"),
@@ -150,15 +182,15 @@ libraries = {
 }
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.986449, 0.164066, 0, -0.164066, 0.986449, 0, 0, 0)
+transform = Transform3D(-0.965926, -0.255312, -0.0424634, 0.258819, -0.952837, -0.158476, 0, -0.164066, 0.986449, -0.204956, 0, 0)
 pixel_size = 0.033
 billboard = 2
 shaded = true
 alpha_cut = 2
 texture_filter = 0
-texture = ExtResource("2_vt2go")
-hframes = 7
-vframes = 7
+texture = ExtResource("2_vg3rf")
+hframes = 5
+vframes = 5
 frame = 1
 
 [node name="playerHitArea" type="Area3D" parent="Sprite3D"]
@@ -166,7 +198,7 @@ transform = Transform3D(1, 0, 0, 0, 0.98645, -0.164066, 0, 0.164066, 0.98645, 0,
 script = SubResource("GDScript_w8p6i")
 
 [node name="hitArea" type="CollisionShape3D" parent="Sprite3D/playerHitArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.490159, -0.000457764, -0.00219727)
+transform = Transform3D(0.999999, -1.49012e-08, 2.77556e-16, 1.49012e-08, 0.999999, 0, -4.9738e-14, -1.13687e-13, 1, -0.304926, -0.277939, -0.00219731)
 shape = SubResource("BoxShape3D_wllbe")
 disabled = true
 
