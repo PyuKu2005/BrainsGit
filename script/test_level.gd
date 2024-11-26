@@ -1,5 +1,5 @@
 extends Node3D
-
+#Fixed!
 @onready var player = $Player
 
 func _physics_process(delta):
