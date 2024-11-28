@@ -95,22 +95,6 @@ tracks/0/keys = {
 "values": [13, 14, 15, 16, 17, 18, 19, 20]
 }
 
-[sub_resource type="Animation" id="Animation_yppo3"]
-resource_name = "Dash"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [24, 25, 26, 27, 28]
-}
-
 [sub_resource type="Animation" id="Animation_a2ymg"]
 length = 0.001
 tracks/0/type = "bezier"
@@ -152,6 +136,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [11, 8, 10, 11]
+}
+
+[sub_resource type="Animation" id="Animation_yppo3"]
+resource_name = "Dash"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [24, 25, 26, 27, 28]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1msms"]
