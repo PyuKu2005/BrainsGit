@@ -26,71 +26,62 @@ func _physics_process(delta):
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	var currentSpeed = SPEED
 
-	# Handle dash input
-	if Input.is_action_just_pressed("Dash") and not isDashing:
-		isDashing = true
-		dashTimer = dash_duration
-		velocity.x = direction.x * dash_speed
-		velocity.z = direction.z * dash_speed
-		animation.play("Dash")
-
 	# Dash logic
 	if isDashing:
 		dashTimer -= delta
-		if dashTimer <= 0:
-			isDashing = false
-
-
-	if not isDashing:
-		if Input.is_action_pressed("Courir") and direction and not isAttacking:
-			currentSpeed = sprintSpeed
-		elif isAttacking:
-			currentSpeed = attackSpeed
-
-		if direction:
-			velocity.x = direction.x * currentSpeed
-			velocity.z = direction.z * currentSpeed
-			if not isAttacking:
-				animation.play("BrainMoving", -1, 2.0 if currentSpeed == sprintSpeed else 1.0, true)
-			if input_dir.x < 0:  
-				$Sprite3D.flip_h = true
-				area3d.scale.x = -abs(area3d.scale.x)
-			elif input_dir.x > 0:  
-				$Sprite3D.flip_h = false
-				area3d.scale.x = abs(area3d.scale.x)
+		if dashTimer > 0:
+			velocity.x = direction.x * dash_speed
+			velocity.z = direction.z * dash_speed
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-			velocity.z = move_toward(velocity.z, 0, SPEED)
-			if not isAttacking:
-				animation.play("BrainIdle", -1, 1.0, true)
+			isDashing = false
+		return  # Prevents other logic from interfering during the dash
+
+	if Input.is_action_just_pressed("Dash") and not isDashing and direction != Vector3.ZERO:
+		isDashing = true
+		dashTimer = dash_duration
+		animation.play("Dash")
+		velocity.x = direction.x * dash_speed
+		velocity.z = direction.z * dash_speed
+		return  # Exit early to ensure the dash logic is isolated
+
+	# Movement logic
+	if direction.length() > 0:
+		currentSpeed = sprintSpeed if Input.is_action_pressed("Courir") and not isAttacking else SPEED
+		velocity.x = direction.x * currentSpeed
+		velocity.z = direction.z * currentSpeed
+		if not isAttacking:
+			animation.play("BrainMoving", -1, 2.0 if currentSpeed == sprintSpeed else 1.0)
+
+		# Flip the sprite based on movement direction
+		if input_dir.x < 0:
+			$Sprite3D.flip_h = true
+		elif input_dir.x > 0:
+			$Sprite3D.flip_h = false
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+		if not isAttacking:
+			animation.play("BrainIdle")
+
+	# Attack logic
+	if Input.is_action_pressed("playerAttack"):
+		if not isAttacking:
+			isAttacking = true
+			animation.play(currentAttackAnimation, -1, 2.0)
+		else:
+			attackComboTimer -= delta
+			if attackComboTimer <= 0:
+				currentAttackAnimation = "Attack" if currentAttackAnimation == "Attack2" else "Attack2"
+				attackComboTimer = comboDelay
+				animation.play(currentAttackAnimation, -1, 2.0)
+	elif isAttacking:
+		isAttacking = false
+		attackComboTimer = 0
+		currentAttackAnimation = "Attack2"
 
 	move_and_slide()
 
 
-	if Input.is_action_pressed("playerAttack"):
-		if not isAttacking:
-			isAttacking = true
-			animation.play(currentAttackAnimation, -1, 2.0, true)  
-		else:
-			if attackComboTimer <= 0:
-				if currentAttackAnimation == "Attack2":
-					currentAttackAnimation = "Attack"
-				else:
-					currentAttackAnimation = "Attack2"
-				attackComboTimer = comboDelay  
-
-			animation.play(currentAttackAnimation, -1, 2.0, true)
-		attackComboTimer -= delta
-
-	if not Input.is_action_pressed("playerAttack"):
-		if isAttacking:
-			isAttacking = false
-			attackComboTimer = 0  
-			currentAttackAnimation = "Attack2" 
-		if direction.length() > 0:
-			animation.play("BrainMoving", -1, 1.0, true)
-		else:
-			animation.play("BrainIdle", -1, 1.0, true)
 
 	############# CAMERA ################
 	var camera_position = $CameraControl.position
