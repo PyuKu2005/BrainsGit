@@ -63,7 +63,7 @@ func _physics_process(delta):
 			velocity.z = move_toward(velocity.z, 0, SPEED)
 			if not isAttacking:
 				animation.play("BrainIdle", -1, 1.0, true)
-
+#fixed!
 	move_and_slide()
 
 
