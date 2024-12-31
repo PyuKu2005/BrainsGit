@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://cn5s5415vxhb0"]
+[gd_scene load_steps=17 format=3 uid="uid://cn5s5415vxhb0"]
 
 [ext_resource type="Script" path="res://script/playerMovement.gd" id="1_i62jh"]
 [ext_resource type="Texture2D" uid="uid://dq3aftttufc4x" path="res://Animations/TheBrain-Sheet.png" id="2_vg3rf"]
+[ext_resource type="PackedScene" uid="uid://bx76p87xo5all" path="res://Particles/WalkingParticles.tscn" id="3_j86tl"]
 
 [sub_resource type="Animation" id="Animation_ijhyk"]
 resource_name = "Attack"
@@ -10,7 +11,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
+tracks/0/path = NodePath("Marker3D/Sprite3D/playerHitArea/hitArea:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -22,7 +23,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D:frame")
+tracks/1/path = NodePath("Marker3D/Sprite3D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -39,7 +40,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/path = NodePath("Marker3D/Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -51,7 +52,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
+tracks/1/path = NodePath("Marker3D/Sprite3D/playerHitArea/hitArea:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -68,7 +69,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/path = NodePath("Marker3D/Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -85,7 +86,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/path = NodePath("Marker3D/Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -101,7 +102,7 @@ length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/path = NodePath("Marker3D/Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -116,7 +117,7 @@ length = 0.001
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/path = NodePath("Marker3D/Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -127,7 +128,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D/playerHitArea/hitArea:disabled")
+tracks/1/path = NodePath("Marker3D/Sprite3D/playerHitArea/hitArea:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -144,7 +145,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/path = NodePath("Marker3D/Sprite3D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -165,16 +166,6 @@ _data = {
 "attackEnemi": SubResource("Animation_3vqdf")
 }
 
-[sub_resource type="GDScript" id="GDScript_w8p6i"]
-script/source = "extends Area3D
-
-var damage = 10
-
-"
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_wllbe"]
-size = Vector3(0.344116, 0.427063, 0.589355)
-
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ujpgf"]
 radius = 0.282597
 height = 1.18717
@@ -190,35 +181,23 @@ border_width_bottom = 4
 border_color = Color(0, 0, 0, 1)
 shadow_color = Color(0, 0, 1, 0.6)
 
+[sub_resource type="GDScript" id="GDScript_w8p6i"]
+script/source = "extends Area3D
+
+var damage = 10
+
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wllbe"]
+size = Vector3(0.344116, 0.427063, 0.589355)
+
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_i62jh")
-dash_duration = 0.1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_1msms")
 }
-
-[node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(-0.965926, -0.255312, -0.0424634, 0.258819, -0.952837, -0.158476, 0, -0.164066, 0.986449, -0.204956, 0, 0)
-pixel_size = 0.033
-billboard = 2
-shaded = true
-alpha_cut = 2
-texture_filter = 0
-texture = ExtResource("2_vg3rf")
-hframes = 6
-vframes = 5
-frame = 1
-
-[node name="playerHitArea" type="Area3D" parent="Sprite3D"]
-transform = Transform3D(1, 0, 0, 0, 0.98645, -0.164066, 0, 0.164066, 0.98645, 0, 0, 0)
-script = SubResource("GDScript_w8p6i")
-
-[node name="hitArea" type="CollisionShape3D" parent="Sprite3D/playerHitArea"]
-transform = Transform3D(0.999999, -1.49012e-08, 2.77556e-16, 1.49012e-08, 0.999999, 0, -4.9738e-14, -1.13687e-13, 1, -0.304926, -0.277939, -0.00219731)
-shape = SubResource("BoxShape3D_wllbe")
-disabled = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_ujpgf")
@@ -240,5 +219,32 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_wq3if")
 value = 100.0
 show_percentage = false
 
+[node name="Marker3D" type="Marker3D" parent="."]
+
+[node name="Sprite3D" type="Sprite3D" parent="Marker3D"]
+transform = Transform3D(-0.965926, -0.255312, -0.0424634, 0.258819, -0.952837, -0.158476, 0, -0.164066, 0.986449, 0, 0, 0)
+pixel_size = 0.033
+billboard = 2
+shaded = true
+alpha_cut = 2
+texture_filter = 0
+texture = ExtResource("2_vg3rf")
+hframes = 6
+vframes = 5
+frame = 1
+
+[node name="playerHitArea" type="Area3D" parent="Marker3D/Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, 0.98645, -0.164066, 0, 0.164066, 0.98645, 0, 0, 0)
+script = SubResource("GDScript_w8p6i")
+
+[node name="hitArea" type="CollisionShape3D" parent="Marker3D/Sprite3D/playerHitArea"]
+transform = Transform3D(0.999999, -1.49012e-08, 2.77556e-16, 1.49012e-08, 0.999999, 0, -4.9738e-14, -1.13687e-13, 1, -0.304926, -0.277939, -0.00219731)
+shape = SubResource("BoxShape3D_wllbe")
+disabled = true
+
+[node name="GPUParticles3D" parent="Marker3D/Sprite3D" instance=ExtResource("3_j86tl")]
+transform = Transform3D(-0.0454596, -0.287482, 2.66791e-08, 0.156533, -0.0812422, -0.0455549, 0.0260345, -0.0135122, 0.273899, 0.00696123, 0.460827, 0.135717)
+local_coords = true
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="body_entered" from="Sprite3D/playerHitArea" to="." method="_on_player_hit_area_body_entered"]
+[connection signal="body_entered" from="Marker3D/Sprite3D/playerHitArea" to="." method="_on_player_hit_area_body_entered"]
