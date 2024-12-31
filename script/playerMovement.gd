@@ -2,22 +2,22 @@ extends CharacterBody3D
 
 @export var SPEED = 5.0
 @export var sprintSpeed = 8.5
-@export var dash_speed = 20.0  # Speed of the dash
-@export var dash_duration = 0.2  # Duration of the dash
+@export var dash_speed = 20.0  
+@export var dash_duration = 0.2  
 
 @onready var area3d = $Sprite3D/playerHitArea
 @onready var animation = $AnimationPlayer
-@onready var material = $Marker3D/Sprite3D/GPUParticles3D.process_material
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var playerHealth = 100
 var isAttacking = false
-var isDashing = false  # To track dashing state
-var dashTimer = 0.0  # Timer to control dash duration
-var attackSpeed = SPEED / 5.0  # Reduced speed during attacks
-var currentAttackAnimation = "Attack2"  # Start with Attack2
-var attackComboTimer = 0.0  # Timer to manage switching between Attack2 and Attack
-var comboDelay = 0.5  # Delay between switching attacks in the loop
+var last_facing_direction = 1
+var isDashing = false  
+var dashTimer = 0.0  
+var attackSpeed = SPEED / 5.0  
+var currentAttackAnimation = "Attack2"  
+var attackComboTimer = 0.0  
+var comboDelay = 0.5  
 
 
 ##### DÉBUT PROCESS DELTA #####
@@ -35,6 +35,7 @@ func _physics_process(delta):
 		dashTimer = dash_duration
 		velocity.x = direction.x * dash_speed
 		velocity.z = direction.z * dash_speed
+		$Marker3D/Sprite3D/RunningParticles.visible = true
 		animation.play("Dash")
 
 	# Dash logic
@@ -53,23 +54,42 @@ func _physics_process(delta):
 		if direction:
 			velocity.x = direction.x * currentSpeed
 			velocity.z = direction.z * currentSpeed
-			$Marker3D/Sprite3D/GPUParticles3D.visible = true
+			$Marker3D/Sprite3D/WalkingDust.visible = true
 			if not isAttacking:
 				animation.play("BrainMoving", -1, 2.0 if currentSpeed == sprintSpeed else 1.0, true)
-			if sprintSpeed:
-				material.set("lifetime", 2.0)
-				
-			if input_dir.x < 0:
-				$Marker3D.scale.x = -1  
-				$Marker3D/Sprite3D.flip_h = true
-			elif input_dir.x > 0:
-				$Marker3D.scale.x = 1  
-				$Marker3D/Sprite3D.flip_h = false
+				$Marker3D/Sprite3D/RunningParticles.visible = false
+				if currentSpeed == sprintSpeed:
+					$Marker3D/Sprite3D/RunningParticles.visible = true
+	if isAttacking:
+	# Lock the marker's rotation based on the last facing direction
+		if last_facing_direction < 0:
+			$Marker3D.scale.x = -1
+			$Marker3D/Sprite3D.flip_h = true
+		elif last_facing_direction > 0:
+			$Marker3D.scale.x = 1
+			$Marker3D/Sprite3D.flip_h = false
+	else:
+		# Update facing direction based on horizontal input only
+		if input_dir.x < 0:
+			$Marker3D.scale.x = -1
+			$Marker3D/Sprite3D.flip_h = true
+			last_facing_direction = -1  # Update facing direction to left
+		elif input_dir.x > 0:
+			$Marker3D.scale.x = 1
+			$Marker3D/Sprite3D.flip_h = false
+			last_facing_direction = 1   # Update facing direction to right
+		if direction:
+			velocity.x = direction.x * currentSpeed
+			velocity.z = direction.z * currentSpeed
+
+
+
 
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			velocity.z = move_toward(velocity.z, 0, SPEED)
-			$Marker3D/Sprite3D/GPUParticles3D.visible = false
+			$Marker3D/Sprite3D/WalkingDust.visible = false
+			$Marker3D/Sprite3D/RunningParticles.visible = false
 			if not isAttacking:
 				animation.play("BrainIdle", -1, 1.0, true)
 	move_and_slide()
@@ -123,4 +143,5 @@ func die():
 
 func _on_player_hit_area_body_entered(body):
 	if body.is_in_group("Enemi"):
-		get_tree().call_group("Enemi", "hurt", 10)
+		body.hurt(10)  
+

@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://cn5s5415vxhb0"]
+[gd_scene load_steps=18 format=3 uid="uid://cn5s5415vxhb0"]
 
 [ext_resource type="Script" path="res://script/playerMovement.gd" id="1_i62jh"]
 [ext_resource type="Texture2D" uid="uid://dq3aftttufc4x" path="res://Animations/TheBrain-Sheet.png" id="2_vg3rf"]
-[ext_resource type="PackedScene" uid="uid://bx76p87xo5all" path="res://Particles/WalkingParticles.tscn" id="3_j86tl"]
+[ext_resource type="PackedScene" uid="uid://bx76p87xo5all" path="res://scenes/Particles/WalkingParticles.tscn" id="3_j86tl"]
+[ext_resource type="PackedScene" uid="uid://ddg0ou7q5gwyx" path="res://scenes/Particles/Runningparticles.tscn" id="4_og0tg"]
 
 [sub_resource type="Animation" id="Animation_ijhyk"]
 resource_name = "Attack"
@@ -242,9 +243,12 @@ transform = Transform3D(0.999999, -1.49012e-08, 2.77556e-16, 1.49012e-08, 0.9999
 shape = SubResource("BoxShape3D_wllbe")
 disabled = true
 
-[node name="GPUParticles3D" parent="Marker3D/Sprite3D" instance=ExtResource("3_j86tl")]
-transform = Transform3D(-0.0454596, -0.287482, 2.66791e-08, 0.156533, -0.0812422, -0.0455549, 0.0260345, -0.0135122, 0.273899, 0.00696123, 0.460827, 0.135717)
+[node name="WalkingDust" parent="Marker3D/Sprite3D" instance=ExtResource("3_j86tl")]
+transform = Transform3D(-0.0454596, -0.287482, 2.5392e-08, 0.156533, -0.0812423, -0.0455549, 0.0260345, -0.0135122, 0.273899, 0.201836, 0.470948, 0.0617332)
 local_coords = true
+
+[node name="RunningParticles" parent="Marker3D/Sprite3D" instance=ExtResource("4_og0tg")]
+transform = Transform3D(-0.190918, -0.917183, 1.10176e-07, 0.674387, -0.252663, -0.142237, 0.112164, -0.0420229, 0.855201, 0.175145, -0.0306795, 0.0574356)
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="body_entered" from="Marker3D/Sprite3D/playerHitArea" to="." method="_on_player_hit_area_body_entered"]

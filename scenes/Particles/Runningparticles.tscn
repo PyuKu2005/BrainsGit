@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddg0ou7q5gwyx"]
+
+[sub_resource type="Curve" id="Curve_evian"]
+_data = [Vector2(0.157233, 0.483516), 0.0, 0.0, 0, 0, Vector2(0.559748, 0.78022), 0.0, 0.0, 0, 0, Vector2(0.578616, 0.615385), 0.0, 0.0, 0, 0, Vector2(0.962264, 0.054945), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_75xnv"]
+curve = SubResource("Curve_evian")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xp0c3"]
+lifetime_randomness = 0.45
+emission_shape = 3
+emission_box_extents = Vector3(1.2, 0.5, 0.5)
+scale_min = 0.25
+scale_max = 0.25
+scale_curve = SubResource("CurveTexture_75xnv")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b0xy0"]
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.152941)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_pr8gk"]
+material = SubResource("StandardMaterial3D_b0xy0")
+
+[node name="GPUParticles3D" type="GPUParticles3D"]
+transform = Transform3D(0.00751147, 1.99627, 0, -0.713698, 0.0210102, 0, 0, 0, 0.866948, 0, 1.00037, 0)
+amount = 10
+lifetime = 0.73
+visibility_aabb = AABB(-1.24106, -0.884115, -1.18115, 2.48212, 1.76823, 2.36229)
+local_coords = true
+trail_enabled = true
+trail_lifetime = 0.94
+process_material = SubResource("ParticleProcessMaterial_xp0c3")
+draw_pass_1 = SubResource("CapsuleMesh_pr8gk")
