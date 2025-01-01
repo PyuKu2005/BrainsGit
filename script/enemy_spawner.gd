@@ -6,7 +6,7 @@ extends Node3D
 	2: 3,
 	3: 5
 }
-@onready var enemy = preload("res://scenes/enemi_test.tscn")
+@onready var enemy = preload("res://scenes/enemyMelee.tscn")
 @onready var rand = RandomNumberGenerator.new()
 @onready var deadEnemy = 0
 var spawnedEnemies = 0  # Track the number of spawned enemies per level

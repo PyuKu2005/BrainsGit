@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cxr6j4klbcs4x"]
 
-[ext_resource type="PackedScene" uid="uid://b64aafgqafdrf" path="res://scenes/enemi_test.tscn" id="1_282dx"]
+[ext_resource type="PackedScene" uid="uid://b64aafgqafdrf" path="res://scenes/Enemis/enemyMelee.tscn" id="1_282dx"]
 [ext_resource type="Script" path="res://script/Niveau.gd" id="1_gcxdp"]
 [ext_resource type="PackedScene" uid="uid://cn5s5415vxhb0" path="res://scenes/Player.tscn" id="2_qh083"]
 

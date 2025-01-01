@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://csjwpqsoydpcd"]
+
+[ext_resource type="Script" path="res://script/bullet.gd" id="1_dedbk"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_rkhg3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wgsj1"]
+albedo_color = Color(0.667763, 0, 0.276138, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ng6s4"]
+
+[node name="Node3D" type="Node3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+script = ExtResource("1_dedbk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00202268, 0.00911076, -0.00157207)
+mesh = SubResource("SphereMesh_rkhg3")
+surface_material_override/0 = SubResource("StandardMaterial3D_wgsj1")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0267719)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_ng6s4")

@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-enum { ROAMING, CHASING }
+enum { ROAMING, CHASING, DASHING }
 
 @onready var navAgent = $NavigationAgent3D
 @onready var animation = $AnimationPlayer
@@ -29,7 +29,6 @@ func _physics_process(delta):
 				timer = 0.0
 			velocity.x = direction.x * SPEED  
 			velocity.z = direction.z * SPEED  
-			
 
 		CHASING:
 			var currentLocation = global_transform.origin
@@ -37,7 +36,9 @@ func _physics_process(delta):
 			var newVelocity = (nextLocation - currentLocation).normalized() * SPEED
 			velocity.x = newVelocity.x  
 			velocity.z = newVelocity.z  
-			
+		
+		DASHING:
+			pass
 
 	move_and_slide()  
 
@@ -51,25 +52,3 @@ func change_direction():
 		randf_range(-1.0, 1.0)  
 	).normalized()
 
-###### RECEIVE DAMAGE ########
-func hurt(hitPoints):
-	if hitPoints < enemyHealth:
-		enemyHealth -= hitPoints
-	else:
-		enemyHealth = 0
-	$SubViewport/healthBar3d.value = enemyHealth
-	if enemyHealth == 0:
-		queue_free()  
-
-####### DEAL DAMAGE #######
-func _on_enemy_hit_area_body_entered(body):
-	if body.is_in_group("Player"):
-		get_tree().call_group("Player", "hurt", 10)
-
-func _on_enemy_detection_body_entered(body):
-	if body.is_in_group("Player"):
-		state = CHASING  
-
-func _on_enemy_detection_body_exited(body):
-	if body.is_in_group("Player"):
-		state = ROAMING  

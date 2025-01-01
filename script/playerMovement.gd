@@ -19,7 +19,6 @@ var currentAttackAnimation = "Attack2"
 var attackComboTimer = 0.0  
 var comboDelay = 0.5  
 
-
 ##### DÉBUT PROCESS DELTA #####
 func _physics_process(delta):
 	if not is_on_floor():
@@ -31,6 +30,9 @@ func _physics_process(delta):
 
 	# Handle dash input
 	if Input.is_action_just_pressed("Dash") and not isDashing:
+		if direction.length() == 0:
+			# Default to facing direction if no input is given
+			direction = Vector3(last_facing_direction, 0, 0).normalized()
 		isDashing = true
 		dashTimer = dash_duration
 		velocity.x = direction.x * dash_speed
@@ -44,8 +46,9 @@ func _physics_process(delta):
 		if dashTimer <= 0:
 			isDashing = false
 
-
+	# Movement logic when not dashing
 	if not isDashing:
+		# Handle movement input
 		if Input.is_action_pressed("Courir") and direction and not isAttacking:
 			currentSpeed = sprintSpeed
 		elif isAttacking:
@@ -57,11 +60,18 @@ func _physics_process(delta):
 			$Marker3D/Sprite3D/WalkingDust.visible = true
 			if not isAttacking:
 				animation.play("BrainMoving", -1, 2.0 if currentSpeed == sprintSpeed else 1.0, true)
-				$Marker3D/Sprite3D/RunningParticles.visible = false
-				if currentSpeed == sprintSpeed:
-					$Marker3D/Sprite3D/RunningParticles.visible = true
+				$Marker3D/Sprite3D/RunningParticles.visible = (currentSpeed == sprintSpeed)
+		else:
+			velocity.x = 0
+			velocity.z = 0
+			$Marker3D/Sprite3D/WalkingDust.visible = false
+			$Marker3D/Sprite3D/RunningParticles.visible = false
+			if not isAttacking:
+				animation.play("BrainIdle", -1, 1.0, true)
+
+	# Update facing direction
 	if isAttacking:
-	# Lock the marker's rotation based on the last facing direction
+		# Lock rotation during attack
 		if last_facing_direction < 0:
 			$Marker3D.scale.x = -1
 			$Marker3D/Sprite3D.flip_h = true
@@ -69,38 +79,26 @@ func _physics_process(delta):
 			$Marker3D.scale.x = 1
 			$Marker3D/Sprite3D.flip_h = false
 	else:
-		# Update facing direction based on horizontal input only
 		if input_dir.x < 0:
 			$Marker3D.scale.x = -1
 			$Marker3D/Sprite3D.flip_h = true
-			last_facing_direction = -1  # Update facing direction to left
+			last_facing_direction = -1
 		elif input_dir.x > 0:
 			$Marker3D.scale.x = 1
 			$Marker3D/Sprite3D.flip_h = false
-			last_facing_direction = 1   # Update facing direction to right
-		if direction:
-			velocity.x = direction.x * currentSpeed
-			velocity.z = direction.z * currentSpeed
+			last_facing_direction = 1
 
-
-
-
-		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-			velocity.z = move_toward(velocity.z, 0, SPEED)
-			$Marker3D/Sprite3D/WalkingDust.visible = false
-			$Marker3D/Sprite3D/RunningParticles.visible = false
-			if not isAttacking:
-				animation.play("BrainIdle", -1, 1.0, true)
 	move_and_slide()
 
-
+	################ Attack Logic ################
 	if Input.is_action_pressed("playerAttack"):
 		if not isAttacking:
 			isAttacking = true
+			attackComboTimer = comboDelay  # Reset combo timer when new attack starts
 			animation.play(currentAttackAnimation, -1, 2.0, true)  
 		else:
 			if attackComboTimer <= 0:
+				# Toggle between attack animations for combos
 				if currentAttackAnimation == "Attack2":
 					currentAttackAnimation = "Attack"
 				else:
@@ -110,17 +108,20 @@ func _physics_process(delta):
 			animation.play(currentAttackAnimation, -1, 2.0, true)
 		attackComboTimer -= delta
 
+	# Reset attack state when attack button is released
 	if not Input.is_action_pressed("playerAttack"):
 		if isAttacking:
 			isAttacking = false
 			attackComboTimer = 0  
-			currentAttackAnimation = "Attack2" 
-		if direction.length() > 0:
+			currentAttackAnimation = "Attack2"  # Reset combo to default state
+
+		# Only play moving animation when not attacking
+		if direction.length() > 0 and not isAttacking:
 			animation.play("BrainMoving", -1, 1.0, true)
-		else:
+		elif not isAttacking:
 			animation.play("BrainIdle", -1, 1.0, true)
 
-	############# CAMERA ################
+############# CAMERA ################
 	var camera_position = $CameraControl.position
 	camera_position.x = lerp(camera_position.x, position.x, 0.08)
 	camera_position.z = lerp(camera_position.z, position.z, 0.08)
@@ -143,5 +144,4 @@ func die():
 
 func _on_player_hit_area_body_entered(body):
 	if body.is_in_group("Enemi"):
-		body.hurt(10)  
-
+		body.hurt(10)
