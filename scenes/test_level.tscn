@@ -22,6 +22,10 @@ shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_48l7d")]
 transform = Transform3D(1, 0, 0, 0, 0.862122, 0, 0, 0, 1, -1.15518, -0.149677, 3.81365)
+SPEED = null
+sprintSpeed = null
+dash_speed = null
+dash_duration = null
 
 [node name="EnemiTest" parent="." instance=ExtResource("3_d68ld")]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -2.26251, -0.652062, -2.84032)

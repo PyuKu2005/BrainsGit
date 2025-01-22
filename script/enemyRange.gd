@@ -29,7 +29,6 @@ func _process(delta):
 		IDLE:
 			print("Quoicoubeh")
 		ALERT:
-			print("Apagnan")
 			if target:
 				var target_position = target.global_transform.origin
 				var current_position = global_transform.origin
