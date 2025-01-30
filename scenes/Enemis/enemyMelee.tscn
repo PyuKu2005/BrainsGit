@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://b64aafgqafdrf"]
+[gd_scene load_steps=14 format=3 uid="uid://b64aafgqafdrf"]
 
 [ext_resource type="Script" path="res://script/enemi_test.gd" id="1_far6w"]
 [ext_resource type="PackedScene" uid="uid://c0yndtkncg0cn" path="res://HealthBar.tscn" id="2_ucwov"]
+[ext_resource type="PackedScene" uid="uid://bqqlihdst8ski" path="res://scenes/health_bar_3d.tscn" id="3_rlagy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ipkm5"]
 albedo_color = Color(0.774624, 0, 0.257303, 1)
@@ -30,7 +31,7 @@ _data = {
 [sub_resource type="SphereShape3D" id="SphereShape3D_0wk0n"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ne7lb"]
-viewport_path = NodePath("SubViewport")
+viewport_path = NodePath(".")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_rtd5a"]
 radius = 10.0
@@ -67,6 +68,8 @@ transform = Transform3D(2.33699, 0, 0, 0, 0.714594, 0, 0, 0, 2.35705, 0, -0.3486
 shape = SubResource("SphereShape3D_0wk0n")
 
 [node name="SubViewport" parent="." instance=ExtResource("2_ucwov")]
+
+[node name="healthBar3d2" parent="SubViewport" instance=ExtResource("3_rlagy")]
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00765872, 1.81856, -0.0695481)
