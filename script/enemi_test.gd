@@ -4,6 +4,7 @@ enum { ROAMING, CHASING }
 
 @onready var navAgent = $NavigationAgent3D
 @onready var animation = $AnimationPlayer
+@onready var damageNumbersOrigin = $"DamageNumbers origin"
 
 @export var changeDirectionInterval : float = 2.0
 
@@ -55,9 +56,10 @@ func change_direction():
 func hurt(hitPoints):
 	if hitPoints < enemyHealth:
 		enemyHealth -= hitPoints
+		DamageNumbers.display_number(hitPoints, damageNumbersOrigin.global_position)
 	else:
 		enemyHealth = 0
-	$SubViewport/healthBar3d.value = enemyHealth
+
 	if enemyHealth == 0:
 		queue_free()  
 
