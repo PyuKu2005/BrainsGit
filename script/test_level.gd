@@ -4,3 +4,4 @@ extends Node3D
 
 func _physics_process(delta):
 	get_tree().call_group("Enemi", "updateTargetLocation", player.global_transform.origin )
+#Fixed!
