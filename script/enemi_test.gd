@@ -9,6 +9,7 @@ enum { ROAMING, CHASING }
 @export var changeDirectionInterval : float = 2.0
 
 var SPEED = 3.0
+var damage = 10
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var enemyHealth = 100
 var timer : float = 0.0
@@ -66,7 +67,7 @@ func hurt(hitPoints):
 ####### DEAL DAMAGE #######
 func _on_enemy_hit_area_body_entered(body):
 	if body.is_in_group("Player"):
-		get_tree().call_group("Player", "hurt", 10)
+		get_tree().call_group("Player", "hurt", damage)
 
 func _on_enemy_detection_body_entered(body):
 	if body.is_in_group("Player"):

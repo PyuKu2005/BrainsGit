@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 enum {
-	IDLE,
-	ALERT,
+	CHASING,
+	SHOOTING
 }
 
 @onready var raycasts = [
@@ -10,42 +10,56 @@ enum {
 	$MeshInstance3D2/RayCast3D2,
 	$MeshInstance3D2/RayCast3D3
 ]
+@onready var navAgent = $NavigationAgent3D
+@onready var animation = $AnimationPlayer
+@onready var eyes = $Eyes
+@onready var shootTimer = $ShootTimer
+@onready var damageNumbersOrigin = $Node3D
 
-var state = IDLE
+@export var changeDirectionInterval : float = 2.0
+@export var turnSpeed = 2.0 
+
+var SPEED = 3.0
+var damage = 10
+var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var enemyHealth = 100
+var timer : float = 0.0
+var direction : Vector3 = Vector3.ZERO
+var state = CHASING
 var target
 var bullet = preload("res://bullet.tscn") 
 var instance
-@export var turnSpeed = 2.0 
-
-@onready var eyes = $Eyes
-@onready var shootTimer = $ShootTimer
 
 
 func _ready():
 	pass
 
 func _process(delta):
+	if not is_on_floor():
+		velocity.y -= gravity * delta  
 	match state:
-		IDLE:
-			print("Quoicoubeh")
-		ALERT:
-			if target:
-				var target_position = target.global_transform.origin
-				var current_position = global_transform.origin
-				var direction = (target_position - current_position).normalized()
-				var target_rotation = -atan2(direction.x, direction.z)
-				rotation.y = lerp_angle(rotation.y, target_rotation, turnSpeed * delta)
-				eyes.look_at(target_position, Vector3.UP)
-
+		CHASING:
+			var currentLocation = global_transform.origin
+			var nextLocation = navAgent.get_next_path_position()
+			var newVelocity = (nextLocation - currentLocation).normalized() * SPEED
+			velocity.x = newVelocity.x  
+			velocity.z = newVelocity.z  
+			
+ 
+		SHOOTING:
+			velocity = Vector3.ZERO
+				
+	move_and_slide() 
+	
 func _on_sight_range_body_entered(body):
 	if body.is_in_group("Player"):
-		state = ALERT
+		state = SHOOTING
 		target = body
 		shootTimer.start()
 
 func _on_sight_range_body_exited(body):
 	if body == target:
-		state = IDLE
+		state = CHASING
 		target = body
 		shootTimer.stop()
 
@@ -58,6 +72,19 @@ func _on_shoot_timer_timeout():
 				instance = bullet.instantiate()
 				instance.global_position = $MeshInstance3D2.global_position
 				instance.transform.basis = $MeshInstance3D2.global_transform.basis
-				get_parent().add_child(instance)
+				get_tree().current_scene.add_child(instance)
 				print("Gotcha !!")
 				break  
+func _on_enemy_hit_area_body_entered(body):
+	if body.is_in_group("Player"):
+		get_tree().call_group("Player", "hurt", damage)
+
+func hurt(hitPoints):
+	if hitPoints < enemyHealth:
+		enemyHealth -= hitPoints
+		DamageNumbers.display_number(hitPoints, damageNumbersOrigin.global_position)
+	else:
+		enemyHealth = 0
+
+	if enemyHealth == 0:
+		queue_free()  

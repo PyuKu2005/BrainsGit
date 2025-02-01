@@ -5,11 +5,13 @@ extends CharacterBody3D
 @export var dash_speed = 20.0  
 @export var dash_duration = 0.2  
 
-@onready var area3d = $Sprite3D/playerHitArea
+@onready var area3d = $Marker3D/Sprite3D/playerHitArea
 @onready var animation = $AnimationPlayer
+@onready var damageNumbersOrigin = $damageNumberOrigin
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var playerHealth = 100
+var damage = 25
 var isAttacking = false
 var last_facing_direction = 1
 var isDashing = false  
@@ -133,6 +135,7 @@ func _physics_process(delta):
 func hurt(hitPoints):
 	if hitPoints < playerHealth:
 		playerHealth -= hitPoints
+		#DamageNumbers.display_number(hitPoints, damageNumbersOrigin.global_position)
 	else:
 		playerHealth = 0
 	$CameraControl/CameraTarget/Camera3D/ProgressBar.value = playerHealth
@@ -144,4 +147,4 @@ func die():
 
 func _on_player_hit_area_body_entered(body):
 	if body.is_in_group("Enemi"):
-		body.hurt(10)
+		body.hurt(damage)

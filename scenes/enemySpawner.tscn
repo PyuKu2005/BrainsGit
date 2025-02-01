@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4r6utovdkoi3"]
+
+[ext_resource type="Script" path="res://enemySpawner.gd" id="1_5thb5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_em4m4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iuin8"]
+albedo_color = Color(0, 1, 1, 1)
+roughness = 0.3
+roughness_texture_channel = 1
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_5thb5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_em4m4")
+surface_material_override/0 = SubResource("StandardMaterial3D_iuin8")
+
+[node name="enemySpawnTimer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="spawnLocation" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.380301, 0.420238)
+
+[connection signal="timeout" from="enemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]

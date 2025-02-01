@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b64aafgqafdrf"]
+[gd_scene load_steps=12 format=3 uid="uid://b64aafgqafdrf"]
 
 [ext_resource type="Script" path="res://script/enemi_test.gd" id="1_far6w"]
 
@@ -23,6 +23,8 @@ _data = {
 "Bobing": SubResource("Animation_l2i87"),
 "RESET": SubResource("Animation_y6h7h")
 }
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nv0k4"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0wk0n"]
 
@@ -49,6 +51,12 @@ libraries = {
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_height_offset = 0.1
+
+[node name="enemyHurtBox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="enemyHurtBox"]
+transform = Transform3D(1.5, 0, 0, 0, 2.48403, 0, 0, 0, 1.5, 0, 0, 0)
+shape = SubResource("SphereShape3D_nv0k4")
 
 [node name="enemyHitArea" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 4.41863, 0, 0, 0, 1, 0, 1.74466, 0)

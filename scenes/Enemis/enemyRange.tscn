@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c3aenpou72yhe"]
+[gd_scene load_steps=9 format=3 uid="uid://c3aenpou72yhe"]
 
 [ext_resource type="Script" path="res://script/enemyRange.gd" id="1_3fe45"]
 
@@ -11,12 +11,17 @@ albedo_color = Color(0.214697, 9.2411e-06, 0.896626, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tl74f"]
 margin = 0.0
-radius = 11.1426
+radius = 5.49907
 
 [sub_resource type="BoxMesh" id="BoxMesh_s7jbw"]
 
-[node name="CharacterBody3D" type="CharacterBody3D"]
-transform = Transform3D(0.999848, 0.0174524, 0, -0.0174524, 0.999848, 0, 0, 0, 1, 0, 0, 0)
+[sub_resource type="SphereShape3D" id="SphereShape3D_hx5p8"]
+radius = 4.49973
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cjiks"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" groups=["Enemi"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_3fe45")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -31,10 +36,8 @@ shape = SubResource("CapsuleShape3D_uygfb")
 [node name="SightRange" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SightRange"]
-transform = Transform3D(-0.142518, -0.0121727, 0.838862, -0.0185912, 0.603845, 0.0146424, -0.911305, -0.0104151, -0.131487, 0.330059, 0.829318, -0.126741)
+transform = Transform3D(0.922569, 0, 0, 0, 0.604057, 0, 0, 0, 0.849231, 0.330059, 0.829318, -0.126741)
 shape = SubResource("SphereShape3D_tl74f")
-
-[node name="Eyes" type="Node3D" parent="."]
 
 [node name="ShootTimer" type="Timer" parent="."]
 
@@ -50,6 +53,23 @@ transform = Transform3D(0.881831, -5.70875, -0.00913126, -0.0999069, -2.49086, 0
 
 [node name="RayCast3D3" type="RayCast3D" parent="MeshInstance3D2"]
 transform = Transform3D(0.877724, 5.80078, -0.00913126, 0.117286, -2.37718, 0.973497, 0.464588, -10.359, -0.22851, 5.69956, -2.22283, -9.93285)
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.00199, 0)
+
+[node name="enemyDetection" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="enemyDetection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.31323e-10, 0.717141, 0)
+shape = SubResource("SphereShape3D_hx5p8")
+
+[node name="enemyHitArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="enemyHitArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_cjiks")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
 [connection signal="body_entered" from="SightRange" to="." method="_on_sight_range_body_entered"]
 [connection signal="body_exited" from="SightRange" to="." method="_on_sight_range_body_exited"]

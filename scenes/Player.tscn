@@ -220,7 +220,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_wq3if")
 value = 100.0
 show_percentage = false
 
-[node name="Marker3D" type="Marker3D" parent="."]
+[node name="Marker3D" type="Marker3D" parent="." groups=["Player"]]
 
 [node name="Sprite3D" type="Sprite3D" parent="Marker3D"]
 transform = Transform3D(-0.965926, -0.255312, -0.0424634, 0.258819, -0.952837, -0.158476, 0, -0.164066, 0.986449, 0, 0, 0)
@@ -249,6 +249,9 @@ local_coords = true
 
 [node name="RunningParticles" parent="Marker3D/Sprite3D" instance=ExtResource("4_og0tg")]
 transform = Transform3D(-0.190918, -0.917183, 1.10176e-07, 0.674387, -0.252663, -0.142237, 0.112164, -0.0420229, 0.855201, 0.175145, -0.0306795, 0.0574356)
+
+[node name="damageNumberOrigin" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71492, 0)
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="body_entered" from="Marker3D/Sprite3D/playerHitArea" to="." method="_on_player_hit_area_body_entered"]
