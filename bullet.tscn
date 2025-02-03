@@ -11,6 +11,7 @@ emission = Color(1, 0, 0, 1)
 emission_energy_multiplier = 5.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ng6s4"]
+radius = 0.66566
 
 [node name="Node3D" type="Node3D" groups=["Enemi"]]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
@@ -27,3 +28,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0267719)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="enemyHitArea" groups=["Enemi"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00400419, 0, 0)
 shape = SubResource("SphereShape3D_ng6s4")
+
+[connection signal="body_entered" from="enemyHitArea" to="." method="_on_enemy_hit_area_body_entered"]

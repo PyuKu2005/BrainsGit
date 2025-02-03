@@ -68,7 +68,6 @@ func _on_shoot_timer_timeout():
 		if raycast.is_colliding():
 			var hit = raycast.get_collider()
 			if hit.is_in_group("Player"):
-				# Properly instantiate the bullet
 				instance = bullet.instantiate()
 				instance.global_position = $MeshInstance3D2.global_position
 				instance.transform.basis = $MeshInstance3D2.global_transform.basis

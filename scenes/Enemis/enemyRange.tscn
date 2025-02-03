@@ -21,7 +21,6 @@ radius = 4.49973
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cjiks"]
 
 [node name="CharacterBody3D" type="CharacterBody3D" groups=["Enemi"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_3fe45")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -42,7 +41,7 @@ shape = SubResource("SphereShape3D_tl74f")
 [node name="ShootTimer" type="Timer" parent="."]
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.362373, 5.23496e-06, 0.000882968, 8.09599e-06, 0.233975, -0.0505852, -0.000319964, 0.0118508, 0.998718, -0.706724, 0.725266, -0.0163174)
+transform = Transform3D(0.362373, -4.59099e-06, 0.000883034, 8.09599e-06, 0.234274, -0.00311644, -0.000319964, 0.000730051, 0.999993, -0.706724, 0.725266, -0.0163174)
 mesh = SubResource("BoxMesh_s7jbw")
 
 [node name="RayCast3D" type="RayCast3D" parent="MeshInstance3D2"]
