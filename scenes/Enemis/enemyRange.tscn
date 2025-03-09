@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c3aenpou72yhe"]
+[gd_scene load_steps=8 format=3 uid="uid://c3aenpou72yhe"]
 
 [ext_resource type="Script" path="res://script/enemyRange.gd" id="1_3fe45"]
 
@@ -14,9 +14,6 @@ margin = 0.0
 radius = 5.49907
 
 [sub_resource type="BoxMesh" id="BoxMesh_s7jbw"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_hx5p8"]
-radius = 4.49973
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cjiks"]
 
@@ -55,12 +52,6 @@ transform = Transform3D(0.877724, 5.80078, -0.00913126, 0.117286, -2.37718, 0.97
 
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.00199, 0)
-
-[node name="enemyDetection" type="Area3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="enemyDetection"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.31323e-10, 0.717141, 0)
-shape = SubResource("SphereShape3D_hx5p8")
 
 [node name="enemyHitArea" type="Area3D" parent="."]
 
