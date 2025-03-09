@@ -18,7 +18,7 @@ var attackSpeed = SPEED / 5.0
 var currentAttackAnimation = "Attack2"  
 var attackComboTimer = 0.0  
 var comboDelay = 0.5  
-
+##voili voilou
 ##### DÉBUT PROCESS DELTA #####
 func _physics_process(delta):
 	if not is_on_floor():
