@@ -8,7 +8,7 @@ extends Node3D
 var damage = 15
 
 func _ready():
-	add_to_group("Enemi")
+	pass
 
 func _process(delta):
 	position += transform.basis * Vector3(0, 0, -speed) * delta

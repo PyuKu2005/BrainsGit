@@ -20,6 +20,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_iuin8")
 wait_time = 3.0
 
 [node name="spawnLocation" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.380301, 0.420238)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.380301, 1.42024)
 
 [connection signal="timeout" from="enemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
