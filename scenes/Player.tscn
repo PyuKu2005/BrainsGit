@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://cn5s5415vxhb0"]
 
-[ext_resource type="Script" path="res://script/playerMovement.gd" id="1_i62jh"]
+[ext_resource type="Script" uid="uid://beyw00ks65bbe" path="res://script/playerMovement.gd" id="1_i62jh"]
 [ext_resource type="Texture2D" uid="uid://dq3aftttufc4x" path="res://Animations/TheBrain-Sheet.png" id="2_vg3rf"]
 [ext_resource type="PackedScene" uid="uid://bx76p87xo5all" path="res://scenes/Particles/WalkingParticles.tscn" id="3_j86tl"]
 [ext_resource type="PackedScene" uid="uid://ddg0ou7q5gwyx" path="res://scenes/Particles/Runningparticles.tscn" id="4_og0tg"]
@@ -8,7 +8,6 @@
 [sub_resource type="Animation" id="Animation_ijhyk"]
 resource_name = "Attack"
 length = 0.5
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -37,7 +36,6 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_maj4y"]
 resource_name = "Attack2"
 length = 0.6
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -57,10 +55,10 @@ tracks/1/path = NodePath("Marker3D/Sprite3D/playerHitArea/hitArea:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [true, true, false, false]
+"values": [true, true, false, false, true]
 }
 
 [sub_resource type="Animation" id="Animation_465wi"]
@@ -158,13 +156,13 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1msms"]
 _data = {
-"Attack": SubResource("Animation_ijhyk"),
-"Attack2": SubResource("Animation_maj4y"),
-"BrainIdle": SubResource("Animation_465wi"),
-"BrainMoving": SubResource("Animation_3duxf"),
-"Dash": SubResource("Animation_yppo3"),
-"RESET": SubResource("Animation_a2ymg"),
-"attackEnemi": SubResource("Animation_3vqdf")
+&"Attack": SubResource("Animation_ijhyk"),
+&"Attack2": SubResource("Animation_maj4y"),
+&"BrainIdle": SubResource("Animation_465wi"),
+&"BrainMoving": SubResource("Animation_3duxf"),
+&"Dash": SubResource("Animation_yppo3"),
+&"RESET": SubResource("Animation_a2ymg"),
+&"attackEnemi": SubResource("Animation_3vqdf")
 }
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ujpgf"]
@@ -197,7 +195,7 @@ script = ExtResource("1_i62jh")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_1msms")
+&"": SubResource("AnimationLibrary_1msms")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

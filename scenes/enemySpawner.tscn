@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b4r6utovdkoi3"]
 
-[ext_resource type="Script" path="res://enemySpawner.gd" id="1_5thb5"]
+[ext_resource type="Script" uid="uid://cvgwg2ylkbdeo" path="res://enemySpawner.gd" id="1_5thb5"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_em4m4"]
 

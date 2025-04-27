@@ -1,141 +1,155 @@
 extends CharacterBody3D
 
+enum { IDLE, MOVING, DASHING, ATTACKING }
+
 @export var SPEED = 5.0
 @export var sprintSpeed = 8.5
-@export var dash_speed = 20.0  
-@export var dash_duration = 0.2  
+@export var dash_speed = 20.0
+@export var dash_duration = 0.2
 
-@onready var area3d = $Marker3D/Sprite3D/playerHitArea
 @onready var animation = $AnimationPlayer
+@onready var area3d = $Marker3D/Sprite3D/playerHitArea
 @onready var damageNumbersOrigin = $damageNumberOrigin
+@export var attack_forward_speed = 2.0 # ← Avancer doucement pendant attaque
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var playerHealth = 100
 var damage = 25
-var isAttacking = false
+
+var state = IDLE
+var direction = Vector3.ZERO
 var last_facing_direction = 1
-var isDashing = false  
-var dashTimer = 0.0  
-var attackSpeed = SPEED / 5.0  
-var currentAttackAnimation = "Attack2"  
-var attackComboTimer = 0.0  
-var comboDelay = 0.5  
-##voili voilou
-##### DÉBUT PROCESS DELTA #####
+var dashTimer = 0.0
+
+# Combo system
+var attack_combo = ["Attack", "Attack2"]
+var attack_index = 0
+var combo_timer = 0.0
+var combo_max_time = 0.5
+var combo_queued = false
+var attack_started = false
+
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	var currentSpeed = SPEED
+	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	# Handle dash input
-	if Input.is_action_just_pressed("Dash") and not isDashing:
-		if direction.length() == 0:
-			# Default to facing direction if no input is given
-			direction = Vector3(last_facing_direction, 0, 0).normalized()
-		isDashing = true
-		dashTimer = dash_duration
-		velocity.x = direction.x * dash_speed
-		velocity.z = direction.z * dash_speed
-		$Marker3D/Sprite3D/RunningParticles.visible = true
-		animation.play("Dash")
+	match state:
+		IDLE:
+			if direction.length() > 0:
+				state = MOVING
+			elif Input.is_action_just_pressed("Dash"):
+				state = DASHING
+			elif Input.is_action_just_pressed("playerAttack"):
+				state = ATTACKING
+			else:
+				animation.play("BrainIdle")
 
-	# Dash logic
-	if isDashing:
-		dashTimer -= delta
-		if dashTimer <= 0:
-			isDashing = false
-
-	# Movement logic when not dashing
-	if not isDashing:
-		# Handle movement input
-		if Input.is_action_pressed("Courir") and direction and not isAttacking:
-			currentSpeed = sprintSpeed
-		elif isAttacking:
-			currentSpeed = attackSpeed
-
-		if direction:
-			velocity.x = direction.x * currentSpeed
-			velocity.z = direction.z * currentSpeed
-			$Marker3D/Sprite3D/WalkingDust.visible = true
-			if not isAttacking:
+		MOVING:
+			var currentSpeed = SPEED
+			if Input.is_action_pressed("Courir"):
+				currentSpeed = sprintSpeed
+			elif Input.is_action_just_pressed("playerAttack"):
+				state = ATTACKING
+				return
+			if direction.length() > 0:
+				velocity.x = direction.x * currentSpeed
+				velocity.z = direction.z * currentSpeed
 				animation.play("BrainMoving", -1, 2.0 if currentSpeed == sprintSpeed else 1.0, true)
-				$Marker3D/Sprite3D/RunningParticles.visible = (currentSpeed == sprintSpeed)
-		else:
-			velocity.x = 0
-			velocity.z = 0
-			$Marker3D/Sprite3D/WalkingDust.visible = false
-			$Marker3D/Sprite3D/RunningParticles.visible = false
-			if not isAttacking:
-				animation.play("BrainIdle", -1, 1.0, true)
+				$Marker3D/Sprite3D/WalkingDust.visible = true
+				$Marker3D/Sprite3D/RunningParticles.visible = currentSpeed == sprintSpeed
+			else:
+				state = IDLE
+				$Marker3D/Sprite3D/WalkingDust.visible = false
+				$Marker3D/Sprite3D/RunningParticles.visible = false
+				velocity.x = 0
+				velocity.z = 0
+			if Input.is_action_just_pressed("Dash"):
+				state = DASHING
 
-	# Update facing direction
-	if isAttacking:
-		# Lock rotation during attack
-		if last_facing_direction < 0:
-			$Marker3D.scale.x = -1
-			$Marker3D/Sprite3D.flip_h = true
-		elif last_facing_direction > 0:
-			$Marker3D.scale.x = 1
-			$Marker3D/Sprite3D.flip_h = false
-	else:
-		if input_dir.x < 0:
-			$Marker3D.scale.x = -1
-			$Marker3D/Sprite3D.flip_h = true
-			last_facing_direction = -1
-		elif input_dir.x > 0:
-			$Marker3D.scale.x = 1
-			$Marker3D/Sprite3D.flip_h = false
-			last_facing_direction = 1
+		DASHING:
+			if direction.length() == 0:
+				direction = Vector3(last_facing_direction, 0, 0).normalized()
+			velocity.x = direction.x * dash_speed
+			velocity.z = direction.z * dash_speed
+			dashTimer -= delta
+			animation.play("Dash")
+			$Marker3D/Sprite3D/RunningParticles.visible = true
+			if dashTimer <= 0:
+				dashTimer = dash_duration
+				state = IDLE
 
-	move_and_slide()
+		ATTACKING:
+			if not attack_started:
+				_play_attack_animation()
+				attack_started = true
 
-	################ Attack Logic ################
-	if Input.is_action_pressed("playerAttack"):
-		if not isAttacking:
-			isAttacking = true
-			attackComboTimer = comboDelay  # Reset combo timer when new attack starts
-			animation.play(currentAttackAnimation, -1, 2.0, true)  
-		else:
-			if attackComboTimer <= 0:
-				# Toggle between attack animations for combos
-				if currentAttackAnimation == "Attack2":
-					currentAttackAnimation = "Attack"
+				# Petite impulsion
+				var attack_impulse = 2.0
+				velocity.x += last_facing_direction * attack_impulse
+				velocity.z = 0
+
+			combo_timer -= delta
+
+			# Freiner doucement le mouvement horizontal pour éviter de glisser
+			velocity.x = lerp(velocity.x, 0.0, 0.2) # ← freinage doux (0.2 = vitesse de freinage)
+
+			if Input.is_action_just_pressed("playerAttack") and combo_timer > 0.0:
+				combo_queued = true
+
+			if not animation.is_playing():
+				if combo_queued and attack_index < attack_combo.size() - 1:
+					attack_index += 1
+					_play_attack_animation()
+					attack_started = false
+					combo_queued = false
 				else:
-					currentAttackAnimation = "Attack2"
-				attackComboTimer = comboDelay  
+					# Fin du combo
+					attack_index = 0
+					attack_started = false
+					combo_queued = false
 
-			animation.play(currentAttackAnimation, -1, 2.0, true)
-		attackComboTimer -= delta
+					if direction.length() > 0:
+						state = MOVING
+					else:
+						state = IDLE
+	_update_facing(input_dir.x)
+	move_and_slide()
+	_update_camera()
 
-	# Reset attack state when attack button is released
-	if not Input.is_action_pressed("playerAttack"):
-		if isAttacking:
-			isAttacking = false
-			attackComboTimer = 0  
-			currentAttackAnimation = "Attack2"  # Reset combo to default state
+############ OUTILS ############
 
-		# Only play moving animation when not attacking
-		if direction.length() > 0 and not isAttacking:
-			animation.play("BrainMoving", -1, 1.0, true)
-		elif not isAttacking:
-			animation.play("BrainIdle", -1, 1.0, true)
+func _play_attack_animation():
+	var anim_name = attack_combo[attack_index]
+	animation.play(anim_name, -1.0, 1.5)
+	combo_timer = combo_max_time
 
-############# CAMERA ################
+func _update_camera():
 	var camera_position = $CameraControl.position
 	camera_position.x = lerp(camera_position.x, position.x, 0.08)
 	camera_position.z = lerp(camera_position.z, position.z, 0.08)
 	camera_position.y = lerp(camera_position.y, position.y, 0.08)
 	$CameraControl.position = camera_position
-##### FIN PROCESS DELTA ##### 
 
-################ RECEVOIR DAMAGE ################
+func _update_facing(input_x):
+	if state == ATTACKING:
+		input_x = last_facing_direction
+	if input_x < 0:
+		last_facing_direction = -1
+		$Marker3D.scale.x = -1
+		$Marker3D/Sprite3D.flip_h = true
+	elif input_x > 0:
+		last_facing_direction = 1
+		$Marker3D.scale.x = 1
+		$Marker3D/Sprite3D.flip_h = false
+
+########## RÉCEPTION DE DÉGÂTS ##########
+
 func hurt(hitPoints):
 	if hitPoints < playerHealth:
 		playerHealth -= hitPoints
-		#DamageNumbers.display_number(hitPoints, damageNumbersOrigin.global_position)
 	else:
 		playerHealth = 0
 	$CameraControl/CameraTarget/Camera3D/ProgressBar.value = playerHealth
@@ -144,6 +158,8 @@ func hurt(hitPoints):
 
 func die():
 	print("YOU DIED")
+
+########## INFLIGER DES DÉGÂTS ##########
 
 func _on_player_hit_area_body_entered(body):
 	if body.is_in_group("Enemi"):

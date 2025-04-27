@@ -1,8 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://cxr6j4klbcs4x"]
 
 [ext_resource type="PackedScene" uid="uid://b64aafgqafdrf" path="res://scenes/Enemis/enemyMelee.tscn" id="1_282dx"]
-[ext_resource type="Script" path="res://script/Niveau.gd" id="1_gcxdp"]
 [ext_resource type="PackedScene" uid="uid://cn5s5415vxhb0" path="res://scenes/Player.tscn" id="2_qh083"]
+
+[sub_resource type="Resource" id="Resource_sdggm"]
+metadata/__load_path__ = "res://script/Niveau.gd"
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_nqtm8"]
 vertices = PackedVector3Array(-24.5, 0.6, -24.5, -24.5, 0.6, 24.5, 24.5, 0.6, 24.5, 24.5, 0.6, -24.5)
@@ -11,7 +13,7 @@ polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 [sub_resource type="BoxShape3D" id="BoxShape3D_lndc3"]
 
 [node name="Node3D" type="Node3D"]
-script = ExtResource("1_gcxdp")
+script = SubResource("Resource_sdggm")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.678185, 0.734891, 0, -0.734891, 0.678185, 0, 13, 0)
