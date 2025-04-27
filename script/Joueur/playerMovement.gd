@@ -15,13 +15,11 @@ enum { IDLE, MOVING, DASHING, ATTACKING }
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var playerHealth = 100
 var damage = 25
-
 var state = IDLE
 var direction = Vector3.ZERO
 var last_facing_direction = 1
 var dashTimer = 0.0
-
-# Combo system
+var dash_started = false
 var attack_combo = ["Attack", "Attack2"]
 var attack_index = 0
 var combo_timer = 0.0
@@ -41,7 +39,7 @@ func _physics_process(delta):
 			if direction.length() > 0:
 				state = MOVING
 			elif Input.is_action_just_pressed("Dash"):
-				state = DASHING
+				start_dash()
 			elif Input.is_action_just_pressed("playerAttack"):
 				state = ATTACKING
 			else:
@@ -67,38 +65,37 @@ func _physics_process(delta):
 				velocity.x = 0
 				velocity.z = 0
 			if Input.is_action_just_pressed("Dash"):
-				state = DASHING
+				start_dash()
 
 		DASHING:
-			if direction.length() == 0:
+			if not dash_started:
+				dash_started = true
+				dashTimer = dash_duration
+				# Appliquer direction au moment du dash
 				direction = Vector3(last_facing_direction, 0, 0).normalized()
-			velocity.x = direction.x * dash_speed
-			velocity.z = direction.z * dash_speed
+				velocity.x = direction.x * dash_speed
+				velocity.z = direction.z * dash_speed
 			dashTimer -= delta
 			animation.play("Dash")
 			$Marker3D/Sprite3D/RunningParticles.visible = true
 			if dashTimer <= 0:
-				dashTimer = dash_duration
 				state = IDLE
-
+				dash_started = false
+				velocity.x = 0
+				velocity.z = 0
 		ATTACKING:
 			if not attack_started:
 				_play_attack_animation()
 				attack_started = true
-
-				# Petite impulsion
-				var attack_impulse = 2.0
+				# Petite impulsion au début de l'attaque
+				var attack_impulse = attack_forward_speed
 				velocity.x += last_facing_direction * attack_impulse
 				velocity.z = 0
-
 			combo_timer -= delta
-
-			# Freiner doucement le mouvement horizontal pour éviter de glisser
-			velocity.x = lerp(velocity.x, 0.0, 0.2) # ← freinage doux (0.2 = vitesse de freinage)
-
+			# Freinage progressif
+			velocity.x = lerp(velocity.x, 0.0, 0.2)
 			if Input.is_action_just_pressed("playerAttack") and combo_timer > 0.0:
 				combo_queued = true
-
 			if not animation.is_playing():
 				if combo_queued and attack_index < attack_combo.size() - 1:
 					attack_index += 1
@@ -110,16 +107,25 @@ func _physics_process(delta):
 					attack_index = 0
 					attack_started = false
 					combo_queued = false
-
 					if direction.length() > 0:
 						state = MOVING
 					else:
 						state = IDLE
+
 	_update_facing(input_dir.x)
 	move_and_slide()
 	_update_camera()
 
 ############ OUTILS ############
+
+func start_dash():
+	state = DASHING
+	dashTimer = dash_duration
+	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	if input_dir.length() == 0:
+		direction = Vector3(last_facing_direction, 0, 0).normalized()
+	else:
+		direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 func _play_attack_animation():
 	var anim_name = attack_combo[attack_index]

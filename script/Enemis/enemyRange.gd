@@ -74,6 +74,8 @@ func _on_shoot_timer_timeout():
 				get_tree().current_scene.add_child(instance)
 				print("Gotcha !!")
 				break  
+				
+
 func _on_enemy_hit_area_body_entered(body):
 	if body.is_in_group("Player"):
 		get_tree().call_group("Player", "hurt", damage)

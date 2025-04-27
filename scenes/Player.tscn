@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://cn5s5415vxhb0"]
 
-[ext_resource type="Script" uid="uid://beyw00ks65bbe" path="res://script/playerMovement.gd" id="1_i62jh"]
+[ext_resource type="Script" uid="uid://beyw00ks65bbe" path="res://script/Joueur/playerMovement.gd" id="1_i62jh"]
 [ext_resource type="Texture2D" uid="uid://dq3aftttufc4x" path="res://Animations/TheBrain-Sheet.png" id="2_vg3rf"]
 [ext_resource type="PackedScene" uid="uid://bx76p87xo5all" path="res://scenes/Particles/WalkingParticles.tscn" id="3_j86tl"]
 [ext_resource type="PackedScene" uid="uid://ddg0ou7q5gwyx" path="res://scenes/Particles/Runningparticles.tscn" id="4_og0tg"]
@@ -237,7 +237,7 @@ transform = Transform3D(1, 0, 0, 0, 0.98645, -0.164066, 0, 0.164066, 0.98645, 0,
 script = SubResource("GDScript_w8p6i")
 
 [node name="hitArea" type="CollisionShape3D" parent="Marker3D/Sprite3D/playerHitArea"]
-transform = Transform3D(0.999999, -1.49012e-08, 2.77556e-16, 1.49012e-08, 0.999999, 0, -4.9738e-14, -1.13687e-13, 1, -0.304926, -0.277939, -0.00219731)
+transform = Transform3D(0.996118, 0.0832108, 0.028693, -0.0835221, 0.996457, 0.00982701, -0.0277736, -0.0121853, 0.99954, -0.304926, -0.277939, -0.00219731)
 shape = SubResource("BoxShape3D_wllbe")
 disabled = true
 
